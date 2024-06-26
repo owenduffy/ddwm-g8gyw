@@ -27,7 +27,7 @@
 // L:FF   H:D3   E:FD //NOTE: this specifies an external crystal as used in a Chinese copy
 // L:E2   H:D3   E:FD //NOTE: this specifies the internal RC oscillator as used in G8GYW's article
 
-#define VERSION "0.02"
+#define VERSION "0.03"
 #define READ_INTEEPROM
 //#define WRITE_INTEEPROM
 //#define CALMODE
@@ -40,6 +40,8 @@
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 int barh=SCREEN_HEIGHT/2;
+int basey=display.height()-1;
+int tickh=barh/4;
 
 #if defined(__AVR_ATmega328P__)
 HardwareSerial &MySerial=Serial;
@@ -208,9 +210,10 @@ void loop(){
     display.fillRect(65,display.height()-1-barh,w,barh,1);
     display.fillRect(w+1,display.height()-barh-1,display.width()-w,barh,0);
     for(int i=80;i<128;i=i+16)
-      display.fillRect(i,display.height()-1-barh/4,1,barh/4,0);
+      display.fillRect(i,basey-barh+3*tickh,1,barh-3*tickh,i>w?WHITE:BLACK);
     for(int i=96;i<128;i=i+32)
-      display.fillRect(i,display.height()-1-barh/2,1,barh/2,0);
+      display.fillRect(i,basey-barh+2*tickh,1,barh-2*tickh,i>w?WHITE:BLACK);
+
     display.setCursor(0,17);
     display.print(SWR,1); // Display VSWR to one decimal place
     }
